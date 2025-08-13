@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PENYIMPAN KOLEKSI GAMBAR AI | by IMAJINASILOKAL</title>
+  <title>Pembuka Koleksi Gambar AI | IMAJINASILOKAL</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -15,35 +15,53 @@
     .header-gradient {
       background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
     }
-    .platform-card {
+    .orange-gradient-btn {
+      background: linear-gradient(90deg, #FF8C00 0%, #FFA500 100%); /* Orange gradient */
+      transition: all 0.3s ease;
+    }
+    .orange-gradient-btn:hover {
+      background: linear-gradient(90deg, #FFA500 0%, #FFD700 100%); /* Lighter orange on hover */
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4);
+    }
+    .orange-gradient-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    .view-option-btn {
       transition: all 0.3s ease;
       border: 2px solid transparent;
     }
-    .platform-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    .view-option-btn.active {
+      border-color: #FF8C00;
+      box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
     }
-    .platform-card.active {
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    .gallery-grid-2x2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery-grid-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .gallery-list {
+      grid-template-columns: 1fr;
     }
     .gallery-item {
       transition: all 0.3s ease;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      position: relative;
     }
     .gallery-item:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
-    .copy-btn {
+    .copy-btn, .copy-icon {
       cursor: pointer;
       transition: all 0.2s;
     }
-    .copy-btn:hover {
+    .copy-btn:hover, .copy-icon:hover {
       transform: scale(1.1);
+      color: #FF8C00;
     }
-    .copy-btn:active {
+    .copy-btn:active, .copy-icon:active {
       transform: scale(0.95);
     }
     .badge {
@@ -53,30 +71,6 @@
       font-size: 0.75rem;
       font-weight: 500;
     }
-    .lora-item {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .lora-item input[type="text"] {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-    }
-    .lora-item input[type="number"] {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-    }
-    .lora-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
     .detail-modal {
       animation: modalFadeIn 0.3s ease-out;
     }
@@ -84,107 +78,26 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .copy-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-      font-size: 0.875rem;
-      color: #4b5563;
+    .hidden {
+      display: none;
     }
-    .copy-section span {
-      flex: 1;
-      background: #f3f4f6;
-      padding: 6px 10px;
-      border-radius: 0.375rem;
-      word-break: break-all;
-    }
-    .reset-btn {
-      background: #ef4444;
+    /* Custom Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #2d3748;
       color: white;
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background 0.2s;
+      padding: 12px 24px;
+      border-radius: 8px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
     }
-    .reset-btn:hover {
-      background: #dc2626;
-    }
-    .delete-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(239, 68, 68, 0.9);
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 10;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .delete-btn:hover {
-      background: #dc2626;
-    }
-
-    /* Custom Message Box */
-    .message-box-overlay {
-        position: fixed;
-        inset: 0;
-        background-color: rgba(0, 0, 0, 0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    .message-box-overlay.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    .message-box-content {
-        background-color: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        max-width: 400px;
-        width: 90%;
-        transform: translateY(20px);
-        transition: transform 0.3s ease;
-    }
-    .message-box-overlay.show .message-box-content {
-        transform: translateY(0);
-    }
-    .message-box-content p {
-        margin-bottom: 20px;
-        font-size: 1.1rem;
-        color: #333;
-    }
-    .message-box-content button {
-        background-color: #4f46e5;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 0 5px;
-        font-weight: 500;
-        transition: background-color 0.2s;
-    }
-    .message-box-content button.cancel-btn {
-        background-color: #ef4444;
-    }
-    .message-box-content button:hover {
-        opacity: 0.9;
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-20px);
     }
   </style>
 </head>
@@ -194,419 +107,76 @@
     <header class="mb-8 text-center">
       <div class="header-gradient text-white py-6 px-4 rounded-2xl shadow-lg mb-4">
         <h1 class="text-3xl md:text-4xl font-bold mb-2">
-          <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
-          PENYIMPAN KOLEKSI GAMBAR AI
+          <i class="fa-solid fa-image mr-2"></i>
+          KOLEKSI GAMBAR AI
         </h1>
         <p class="text-indigo-100 text-lg">by IMAJINASILOKAL</p>
       </div>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Simpan dan kelola koleksi gambar AI beserta prompt dan parameternya dengan mudah. 
-        Khusus untuk pengguna Tensor, Midjourney, Gemini, dan platform AI lainnya.
+        Lihat dan kelola koleksi gambar AI Anda dengan mudah.
       </p>
     </header>
-    <!-- Form Input -->
-    <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden">
-      <div class="header-gradient p-5 text-white">
-        <h2 class="text-xl font-bold flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle"></i>
-          Tambah Koleksi Baru
-        </h2>
+
+    <!-- Import JSON Section -->
+    <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden p-5">
+      <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-file-import"></i>
+        Impor Koleksi dari JSON
+      </h2>
+      <div class="flex flex-col md:flex-row items-center gap-4">
+        <input type="file" id="importInput" accept="application/json" class="hidden">
+        <button type="button" id="importBtn" class="orange-gradient-btn w-full md:w-auto px-6 py-3 text-white rounded-xl font-medium flex items-center justify-center gap-2">
+          <i class="fa-solid fa-upload"></i>
+          Pilih File JSON
+        </button>
+        <span id="fileNameDisplay" class="text-gray-600 italic">Belum ada file dipilih.</span>
       </div>
-      <form id="imageForm" class="p-5">
-        <!-- Gambar Upload -->
-        <div class="mb-6">
-          <label class="block mb-3 font-medium text-gray-700 text-lg">
-            <i class="fa-solid fa-image mr-2"></i>
-            Unggah Gambar AI
-          </label>
-          <div class="flex items-center justify-center w-full">
-            <label for="imageInput" class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 border-gray-300 hover:border-indigo-400">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
-                <p class="mb-2 text-sm text-gray-500">
-                  <span class="font-semibold">Klik untuk upload</span> atau drag & drop
-                </p>
-                <p class="text-xs text-gray-500">PNG, JPG (Max. 2MB)</p>
-              </div>
-              <input id="imageInput" type="file" accept="image/*" class="hidden" required>
-            </label>
-          </div>
-          <div id="imagePreview" class="mt-3 hidden">
-            <img id="previewImg" class="max-h-64 rounded-lg shadow border mx-auto" alt="Preview Gambar">
-          </div>
-        </div>
-        <!-- Prompt Input -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label for="prompt" class="block mb-2 font-medium text-gray-700">
-              <i class="fa-solid fa-keyboard mr-2"></i>
-              Prompt
-            </label>
-            <textarea id="prompt" rows="4" class="block w-full p-4 border rounded-xl focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500" placeholder="Masukkan prompt untuk menghasilkan gambar ini..." required></textarea>
-          </div>
-          <div>
-            <label for="negativePrompt" class="block mb-2 font-medium text-gray-700">
-              <i class="fa-solid fa-ban mr-2"></i>
-              Negative Prompt
-            </label>
-            <textarea id="negativePrompt" rows="3" class="block w-full p-4 border rounded-xl focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500" placeholder="Elemen yang tidak diinginkan dalam gambar..."></textarea>
-          </div>
-        </div>
-        <!-- Platform Selection -->
-        <div class="mb-6">
-          <label class="block mb-3 font-medium text-gray-700 text-lg">
-            <i class="fa-solid fa-cube mr-2"></i>
-            Pilih Platform
-          </label>
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div>
-              <input type="radio" name="platform" id="tensor" value="tensor" class="hidden peer">
-              <label for="tensor" class="platform-card flex flex-col items-center justify-center p-4 bg-white border border-gray-300 rounded-xl cursor-pointer peer-checked:border-indigo-500 peer-checked:ring-2 peer-checked:ring-indigo-200 hover:bg-gray-50">
-                <i class="fa-solid fa-robot text-3xl mb-3 text-indigo-600"></i>
-                <span class="font-medium">Tensor</span>
-              </label>
-            </div>
-            <div>
-              <input type="radio" name="platform" id="midjourney" value="midjourney" class="hidden peer">
-              <label for="midjourney" class="platform-card flex flex-col items-center justify-center p-4 bg-white border border-gray-300 rounded-xl cursor-pointer peer-checked:border-indigo-500 peer-checked:ring-2 peer-checked:ring-indigo-200 hover:bg-gray-50">
-                <i class="fa-brands fa-artstation text-3xl mb-3 text-purple-600"></i>
-                <span class="font-medium">Midjourney</span>
-              </label>
-            </div>
-            <div>
-              <input type="radio" name="platform" id="gemini" value="gemini" class="hidden peer" checked>
-              <label for="gemini" class="platform-card flex flex-col items-center justify-center p-4 bg-white border border-gray-300 rounded-xl cursor-pointer peer-checked:border-indigo-500 peer-checked:ring-2 peer-checked:ring-indigo-200 hover:bg-gray-50">
-                <i class="fa-solid fa-gem text-3xl mb-3 text-blue-600"></i>
-                <span class="font-medium">Gemini</span>
-              </label>
-            </div>
-            <div>
-              <input type="radio" name="platform" id="piclumen" value="piclumen" class="hidden peer">
-              <label for="piclumen" class="platform-card flex flex-col items-center justify-center p-4 bg-white border border-gray-300 rounded-xl cursor-pointer peer-checked:border-indigo-500 peer-checked:ring-2 peer-checked:ring-indigo-200 hover:bg-gray-50">
-                <i class="fa-solid fa-palette text-3xl mb-3 text-green-600"></i>
-                <span class="font-medium">Piclumen</span>
-              </label>
-            </div>
-            <div>
-              <input type="radio" name="platform" id="leonardo" value="leonardo" class="hidden peer">
-              <label for="leonardo" class="platform-card flex flex-col items-center justify-center p-4 bg-white border border-gray-300 rounded-xl cursor-pointer peer-checked:border-indigo-500 peer-checked:ring-2 peer-checked:ring-indigo-200 hover:bg-gray-50">
-                <i class="fa-solid fa-paintbrush text-3xl mb-3 text-amber-600"></i>
-                <span class="font-medium">Leonardo</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <!-- Tensor Fields -->
-        <div id="tensorFields">
-          <div class="bg-indigo-50 border-l-4 border-indigo-500 rounded-lg p-4 mb-6">
-            <h3 class="text-lg font-semibold mb-4 text-indigo-700 flex items-center gap-2">
-              <i class="fa-solid fa-sliders"></i>
-              Pengaturan Tensor
-            </h3>
-            <!-- Model Selection -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Model / Checkpoint</label>
-                <select id="model" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="" disabled selected>Pilih Model</option>
-                  <optgroup label="Model Populer">
-                    <option value="Flux.1-Dev-FP8">Flux.1-Dev-FP8</option>
-                    <option value="HUBG_Realistic">HUBG_Realistic</option>
-                    <option value="SD_2.1">Stable Diffusion 2.1</option>
-                    <option value="SDXL">Stable Diffusion XL</option>
-                    <option value="PONY">PONY Diffusion</option>
-                  </optgroup>
-                  <optgroup label="Model Lainnya">
-                    <option value="Illustrious">Illustrious</option>
-                    <option value="DreamShaper">DreamShaper</option>
-                    <option value="RevAnimated">RevAnimated</option>
-                    <option value="RealisticVision">RealisticVision</option>
-                    <option value="custom">Lainnya...</option>
-                  </optgroup>
-                </select>
-                <input type="text" id="customModel" class="block w-full p-3 border rounded-lg mt-2 hidden" placeholder="Nama model custom">
-              </div>
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">VAE</label>
-                <select id="vae" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="" selected>Default</option>
-                  <optgroup label="VAE Populer">
-                    <option value="vae-ft-mse-840000-ema-pruned">vae-ft-mse-840000-ema-pruned</option>
-                    <option value="orangemix.vae">orangemix.vae</option>
-                    <option value="kl-f8-anime2.vae">kl-f8-anime2.vae</option>
-                  </optgroup>
-                  <optgroup label="VAE Lainnya">
-                    <option value="anything-v4.0.vae">anything-v4.0.vae</option>
-                    <option value="wd-1-5-vae">wd-1-5-vae</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-            <!-- LoRA Selection -->
-            <div class="mb-6">
-              <label class="block mb-3 font-medium text-gray-700">
-                <i class="fa-solid fa-layer-group mr-2"></i>
-                LoRA (Maksimal 6)
-              </label>
-              <div class="lora-grid">
-                <!-- LoRA 1 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA (cth: DetailEnhancer)" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.8" class="lora-strength" placeholder="Strength">
-                </div>
-                <!-- LoRA 2 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA (cth: AnimeStyle)" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.0" class="lora-strength" placeholder="Strength">
-                </div>
-                <!-- LoRA 3 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA (cth: RealisticVision)" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.0" class="lora-strength" placeholder="Strength">
-                </div>
-                <!-- LoRA 4 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA (cth: PortraitMaster)" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.0" class="lora-strength" placeholder="Strength">
-                </div>
-                <!-- LoRA 5 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA (cth: LandscapePro)" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.0" class="lora-strength" placeholder="Strength">
-                </div>
-                <!-- LoRA 6 -->
-                <div class="lora-item">
-                  <input type="text" class="lora-name" placeholder="Nama LoRA" value="">
-                  <input type="number" min="0" max="2" step="0.1" value="0.0" class="lora-strength" placeholder="Strength">
-                </div>
-              </div>
-            </div>
-            <!-- Additional Settings -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Sampler</label>
-                <select id="sampler" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="euler">euler</option>
-                  <option value="euler_ancestral">euler_ancestral</option>
-                  <option value="heun">heun</option>
-                  <option value="heunpp2">heunpp2</option>
-                  <option value="dpm_2">dpm_2</option>
-                  <option value="dpm_2_ancestral">dpm_2_ancestral</option>
-                  <option value="lms">lms</option>
-                  <option value="dpm_fast">dpm_fast</option>
-                  <option value="dpm_adaptive">dpm_adaptive</option>
-                  <option value="dpmpp_2s_ancestral">dpmpp_2s_ancestral</option>
-                  <option value="dpmpp_sde_gpu">dpmpp_sde_gpu</option>
-                  <option value="dpmpp_2m" selected>dpmpp_2m</option>
-                  <option value="dpmpp_2m_sde_gpu">dpmpp_2m_sde_gpu</option>
-                  <option value="dpmpp_3m_sde_gpu">dpmpp_3m_sde_gpu</option>
-                  <option value="ddpm">ddpm</option>
-                  <option value="lcm">lcm</option>
-                  <option value="restart">restart</option>
-                  <option value="euler_dy">euler_dy</option>
-                  <option value="euler_smea_dy">euler_smea_dy</option>
-                  <option value="ddim">ddim</option>
-                  <option value="uni_pc">uni_pc</option>
-                  <option value="uni_pc_bh2">uni_pc_bh2</option>
-                  <option value="sde_multistep">sde_multistep</option>
-                </select>
-              </div>
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Scheduler</label>
-                <select id="scheduler" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="normal" selected>normal</option>
-                  <option value="karras">karras</option>
-                  <option value="sgm_uniform">sgm_uniform</option>
-                  <option value="exponential">exponential</option>
-                  <option value="simple">simple</option>
-                  <option value="ddim_uniform">ddim_uniform</option>
-                  <option value="beta">beta</option>
-                  <option value="linear quadratic">linear quadratic</option>
-                </select>
-              </div>
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Guidance Scale</label>
-                <input type="number" id="cfg" min="0" max="20" step="0.1" value="3.5" class="block w-full p-3 border rounded-lg" placeholder="cth: 3.5">
-              </div>
-            </div>
-            <!-- Steps and Checkboxes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Steps</label>
-                <input type="number" id="steps" min="1" max="150" value="30" class="block w-full p-3 border rounded-lg" placeholder="cth: 30">
-              </div>
-              <div>
-                <label class="block mb-2 font-medium text-gray-700">Seed</label>
-                <input type="number" id="seed" class="block w-full p-3 border rounded-lg" placeholder="Seed value (acak jika kosong)">
-              </div>
-              <div class="flex items-center">
-                <input type="checkbox" id="upscaler" class="w-5 h-5 text-indigo-600 rounded">
-                <label for="upscaler" class="ml-2 font-medium text-gray-700">Gunakan Upscaler</label>
-              </div>
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="adetailer" class="w-5 h-5 text-indigo-600 rounded" checked>
-              <label for="adetailer" class="ml-2 font-medium text-gray-700">Gunakan ADetailer</label>
-            </div>
-          </div>
-        </div>
-        <!-- Non-Tensor Fields -->
-        <div id="altModelFields" class="hidden">
-          <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 mb-6">
-            <h3 class="text-lg font-semibold mb-4 text-blue-700 flex items-center gap-2">
-              <i class="fa-solid fa-gear"></i>
-              Pengaturan Model
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div id="midjourneyModels" class="hidden">
-                <label class="block mb-2 font-medium text-gray-700">Model Midjourney</label>
-                <select id="midjourneyModel" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="V7" selected>V7 (default)</option>
-                  <option value="V6">V6</option>
-                  <option value="V5.2">V5.2</option>
-                  <option value="V5.1">V5.1</option>
-                  <option value="V5">V5</option>
-                  <option value="V4">V4</option>
-                  <option value="V3">V3</option>
-                  <option value="V2">V2</option>
-                  <option value="V1">V1</option>
-                  <option value="Niji V5">Niji V5</option>
-                  <option value="Niji V4">Niji V4</option>
-                </select>
-              </div>
-              <div id="piclumenModels" class="hidden">
-                <label class="block mb-2 font-medium text-gray-700">Model Piclumen</label>
-                <select id="piclumenModel" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="PicLumen Art V1">PicLumen Art V1</option>
-                  <option value="PicLumen Realistic V2" selected>PicLumen Realistic V2</option>
-                  <option value="PicLumen Anime V2">PicLumen Anime V2</option>
-                  <option value="PicLumen Lineart V1">PicLumen Lineart V1</option>
-                  <option value="Namiya">Namiya</option>
-                  <option value="FLUX.1 Kontext">FLUX.1 Kontext</option>
-                  <option value="Primo">Primo</option>
-                  <option value="Pony Diffusion V6">Pony Diffusion V6</option>
-                  <option value="FLUX.1-schnell">FLUX.1-schnell</option>
-                  <option value="FLUX.1-dev">FLUX.1-dev</option>
-                </select>
-              </div>
-              <div id="dreaminaModels" class="hidden">
-                <label class="block mb-2 font-medium text-gray-700">Model Dreamina</label>
-                <select id="dreaminaModel" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="Gambar 3.1" selected>Gambar 3.1</option>
-                  <option value="Gambar 3.0">Gambar 3.0</option>
-                  <option value="Gambar 2.1">Gambar 2.1</option>
-                  <option value="Gambar 2.0 Pro">Gambar 2.0 Pro</option>
-                  <option value="Gambar 1.4">Gambar 1.4</option>
-                </select>
-              </div>
-              <div id="leonardoModels" class="hidden">
-                <label class="block mb-2 font-medium text-gray-700">Model Leonardo</label>
-                <select id="leonardoModel" class="block w-full p-3 border rounded-lg bg-white">
-                  <optgroup label="Preset Model Styles">
-                    <option value="Cinematic Kino">Cinematic Kino</option>
-                    <option value="Concept Art">Concept Art</option>
-                    <option value="Graphic Design">Graphic Design</option>
-                    <option value="Illustrative Albedo">Illustrative Albedo</option>
-                    <option value="Leonardo Lightning">Leonardo Lightning</option>
-                    <option value="Lifelike Vision">Lifelike Vision</option>
-                    <option value="Portrait Perfect">Portrait Perfect</option>
-                    <option value="Stock Photography">Stock Photography</option>
-                  </optgroup>
-                  <optgroup label="Featured Models">
-                    <option value="Lucid Realism">Lucid Realism</option>
-                    <option value="GPT-Image-1">GPT-Image-1</option>
-                    <option value="FLUX.1 Kontext">FLUX.1 Kontext</option>
-                    <option value="Phoenix 1.0">Phoenix 1.0</option>
-                    <option value="Flux Dev">Flux Dev</option>
-                    <option value="Flux Schnell">Flux Schnell</option>
-                    <option value="Phoenix 0.9">Phoenix 0.9</option>
-                    <option value="Anime">Anime</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div id="geminiModels">
-                <label class="block mb-2 font-medium text-gray-700">Model Gemini</label>
-                <select id="geminiModel" class="block w-full p-3 border rounded-lg bg-white">
-                  <option value="Gemini 2.5 Flash" selected>Gemini 2.5 Flash</option>
-                  <option value="Gemini 2.5 Pro">Gemini 2.5 Pro</option>
-                  <option value="Custom Gem">Custom Gem</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Metadata -->
-        <div class="mt-6">
-          <h3 class="text-lg font-semibold mb-4 text-indigo-700 flex items-center gap-2">
-            <i class="fa-solid fa-tags"></i>
-            Metadata
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label for="tags" class="block mb-2 font-medium text-gray-700">Tags</label>
-              <input type="text" id="tags" class="block w-full p-3 border rounded-lg" placeholder="Pisahkan dengan koma (cth: potret, seni digital, wanita)">
-            </div>
-            <div>
-              <label for="notes" class="block mb-2 font-medium text-gray-700">Catatan</label>
-              <textarea id="notes" rows="3" class="block w-full p-3 border rounded-lg" placeholder="Catatan tambahan tentang prompt atau gambar..."></textarea>
-            </div>
-          </div>
-        </div>
-        <!-- Action Buttons -->
-        <div class="mt-8 flex flex-wrap gap-3">
-          <button type="submit" id="submitBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 flex items-center gap-2 font-medium">
-            <i class="fa-solid fa-save"></i>
-            Simpan Koleksi
-          </button>
-          <button type="button" id="exportBtn" class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 flex items-center gap-2 font-medium">
-            <i class="fa-solid fa-file-export"></i>
-            Export JSON
-          </button>
-          <input type="file" id="importInput" accept="application/json" class="hidden">
-          <button type="button" id="importBtn" class="px-6 py-3 bg-yellow-600 text-white rounded-xl hover:bg-yellow-700 flex items-center gap-2 font-medium">
-            <i class="fa-solid fa-file-import"></i>
-            Import JSON
-          </button>
-          <button type="button" id="resetBtn" class="px-6 py-3 reset-btn flex items-center gap-2 font-medium">
-            <i class="fa-solid fa-rotate-left"></i>
-            Reset Form
-          </button>
-        </div>
-      </form>
     </div>
-    <!-- Gallery Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+
+    <!-- Gallery Controls -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
       <h2 class="text-2xl font-bold flex items-center gap-2">
         <i class="fa-solid fa-images text-indigo-600"></i>
         Galeri Koleksi
       </h2>
-      <div class="flex gap-3">
-        <div class="relative">
-          <input type="text" id="searchInput" placeholder="Cari prompt atau tag..." class="pl-10 pr-4 py-2 border rounded-lg w-full md:w-64">
+      <div class="flex flex-wrap gap-3 items-center">
+        <!-- View Options -->
+        <div class="flex rounded-lg border border-gray-300 overflow-hidden">
+          <button id="viewGrid2x2" class="view-option-btn px-4 py-2 text-gray-700 bg-gray-100 active" title="Grid 2x2">
+            <i class="fa-solid fa-th-large"></i>
+          </button>
+          <button id="viewGrid3x3" class="view-option-btn px-4 py-2 text-gray-700 bg-gray-100" title="Grid 3x3">
+            <i class="fa-solid fa-grip"></i>
+          </button>
+          <button id="viewList" class="view-option-btn px-4 py-2 text-gray-700 bg-gray-100" title="List View">
+            <i class="fa-solid fa-list"></i>
+          </button>
+        </div>
+        <!-- Search Input -->
+        <div class="relative flex-grow">
+          <input type="text" id="searchInput" placeholder="Cari prompt atau judul..." class="pl-10 pr-4 py-2 border rounded-lg w-full">
           <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
         </div>
-        <select id="platformFilter" class="border rounded-lg px-3 py-2">
-          <option value="">Semua Platform</option>
-          <option value="tensor">Tensor</option>
-          <option value="midjourney">Midjourney</option>
-          <option value="gemini">Gemini</option>
-          <option value="piclumen">Piclumen</option>
-          <option value="leonardo">Leonardo</option>
-          <option value="dreamina">Dreamina</option>
-        </select>
       </div>
     </div>
+    
     <!-- Gallery -->
-    <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-      <!-- Data will appear here after input -->
+    <div id="gallery" class="grid gap-5 gallery-grid-2x2">
+      <!-- Konten galeri akan diisi oleh JavaScript -->
+    </div>
+    <div id="emptyGallery" class="text-center py-16 text-gray-500 hidden">
+        <i class="fa-solid fa-ghost text-5xl mb-4"></i>
+        <p class="text-xl">Galeri masih kosong.</p>
+        <p>Silakan impor koleksi Anda dari file JSON.</p>
     </div>
   </div>
+
   <!-- Detail Modal -->
   <div id="detailModal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 hidden">
     <div class="bg-white rounded-2xl shadow-lg max-w-4xl w-full max-h-[90vh] overflow-auto detail-modal">
-      <div class="header-gradient text-white p-5 flex justify-between items-center sticky top-0">
+      <div class="header-gradient text-white p-5 flex justify-between items-center sticky top-0 z-10">
         <h3 class="text-xl font-bold">Detail Koleksi</h3>
-        <button onclick="document.getElementById('detailModal').classList.add('hidden')" class="text-white hover:text-gray-200">
+        <button onclick="closeDetailModal()" class="text-white hover:text-gray-200">
           <i class="fa-solid fa-xmark text-2xl"></i>
         </button>
       </div>
@@ -614,136 +184,43 @@
         <div class="flex flex-col lg:flex-row gap-8">
           <!-- Image Column -->
           <div class="lg:w-2/5">
-            <img id="detailImage" class="rounded-xl shadow-lg border w-full">
-            <div class="mt-6 bg-gray-50 rounded-xl p-4">
-              <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-copy"></i>
-                Salin Data
-              </h4>
-              <div class="space-y-2">
-                <button onclick="copyToClipboard('prompt')" class="copy-btn w-full text-left px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2">
-                  <i class="fa-solid fa-copy"></i>
-                  <span>Prompt</span>
+            <img id="detailImage" src="" class="rounded-xl shadow-lg border w-full" onerror="this.onerror=null;this.src='https://placehold.co/500x500/e2e8f0/e2e8f0?text=Gambar+Tidak+Tersedia';">
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button id="copyImageUrlBtn" class="orange-gradient-btn flex-1 px-4 py-2 text-white rounded-lg font-medium flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-link"></i> Salin URL Gambar
                 </button>
-                <button onclick="copyToClipboard('negativePrompt')" class="copy-btn w-full text-left px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2">
-                  <i class="fa-solid fa-copy"></i>
-                  <span>Negative Prompt</span>
-                </button>
-                <button onclick="copyToClipboard('model')" class="copy-btn w-full text-left px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2">
-                  <i class="fa-solid fa-copy"></i>
-                  <span>Model</span>
-                </button>
-                <button onclick="copyToClipboard('lora')" class="copy-btn w-full text-left px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2">
-                  <i class="fa-solid fa-copy"></i>
-                  <span>LoRA</span>
-                </button>
-                <button onclick="copyToClipboard('parameters')" class="copy-btn w-full text-left px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center gap-2">
-                  <i class="fa-solid fa-copy"></i>
-                  <span>Semua Parameter</span>
-                </button>
-                <button onclick="copyAllData()" class="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium mt-2">
-                  <i class="fa-solid fa-copy"></i>
-                  Salin Semua Data
-                </button>
-              </div>
+                <a id="openImageNewTabBtn" href="#" target="_blank" class="orange-gradient-btn flex-1 px-4 py-2 text-white rounded-lg font-medium flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-external-link-alt"></i> Buka di Tab Baru
+                </a>
             </div>
-            <!-- Edit Button added to detail modal -->
-            <button onclick="editItemFromDetail()" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium mt-4">
-                <i class="fa-solid fa-edit mr-2"></i> Edit Koleksi
-            </button>
           </div>
           <!-- Info Column -->
           <div class="lg:w-3/5">
-            <div class="space-y-6">
+            <div class="space-y-4">
+              <!-- Prompt -->
               <div>
-                <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-comment"></i>
-                  Prompt
-                </h4>
-                <p id="detailPrompt" class="text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-lg min-h-20"></p>
+                <h4 class="font-semibold text-lg mb-2 flex items-center gap-2"><i class="fa-solid fa-comment"></i>Prompt</h4>
+                <p id="detailPrompt" class="text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-lg break-words"></p>
+                <button onclick="copyElementText('detailPrompt')" class="orange-gradient-btn mt-2 px-4 py-2 text-white rounded-lg font-medium flex items-center gap-2">
+                  <i class="fa-solid fa-copy"></i> Salin Prompt
+                </button>
               </div>
-              <div>
-                <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-ban"></i>
-                  Negative Prompt
-                </h4>
-                <p id="detailNegativePrompt" class="text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-lg min-h-16"></p>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-cube"></i>
-                    Platform
-                  </h4>
-                  <span id="detailPlatform" class="badge bg-indigo-100 text-indigo-800">Tensor</span>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-microchip"></i>
-                    Model
-                  </h4>
-                  <span id="detailModel" class="badge bg-purple-100 text-purple-800">Flux.1-Dev-FP8</span>
+              
+              <!-- Parameter (Optional, based on your JSON structure) -->
+              <div id="detailParametersSection" class="bg-gray-50 rounded-lg p-4 hidden">
+                <h4 class="font-semibold text-lg flex items-center gap-2"><i class="fa-solid fa-info-circle"></i>Parameter</h4>
+                <div class="mt-3 space-y-2 text-sm" id="detailParametersContent">
+                    <!-- Parameters will be injected here -->
                 </div>
               </div>
+
               <div>
-                <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-tags"></i>
-                  Tags
-                </h4>
+                <h4 class="font-semibold text-lg mb-2 flex items-center gap-2"><i class="fa-solid fa-tags"></i>Tags</h4>
                 <div id="detailTags" class="flex flex-wrap gap-2"></div>
               </div>
               <div>
-                <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-info-circle"></i>
-                  Parameter
-                </h4>
-                <div class="bg-gray-50 rounded-lg p-4">
-                  <div class="copy-section">
-                    <span id="detailSteps">30</span>
-                    <button onclick="copyText('detailSteps')" class="copy-btn">
-                      <i class="fa-solid fa-copy text-gray-500"></i>
-                    </button>
-                  </div>
-                  <div class="copy-section">
-                    <span id="detailCfg">3.5</span>
-                    <button onclick="copyText('detailCfg')" class="copy-btn">
-                      <i class="fa-solid fa-copy text-gray-500"></i>
-                    </button>
-                  </div>
-                  <div class="copy-section">
-                    <span id="detailSampler">dpmpp_2m</span>
-                    <button onclick="copyText('detailSampler')" class="copy-btn">
-                      <i class="fa-solid fa-copy text-gray-500"></i>
-                    </button>
-                  </div>
-                  <div class="copy-section">
-                    <span id="detailScheduler">normal</span>
-                    <button onclick="copyText('detailScheduler')" class="copy-btn">
-                      <i class="fa-solid fa-copy text-gray-500"></i>
-                    </button>
-                  </div>
-                  <div class="copy-section">
-                    <span id="detailSeed">-</span>
-                    <button onclick="copyText('detailSeed')" class="copy-btn">
-                      <i class="fa-solid fa-copy text-gray-500"></i>
-                    </button>
-                  </div>
-                  <div class="mt-3">
-                    <strong>LoRA:</strong>
-                    <div id="detailLora" class="flex flex-wrap gap-2 mt-1"></div>
-                  </div>
-                  <div class="mt-3 flex gap-2">
-                    <span id="detailUpscaler" class="badge bg-yellow-100 text-yellow-800 hidden">Upscaler</span>
-                    <span id="detailAdetailer" class="badge bg-yellow-100 text-yellow-800">ADetailer</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h4 class="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <i class="fa-solid fa-sticky-note"></i>
-                  Catatan
-                </h4>
-                <p id="detailNotes" class="text-gray-700 bg-gray-50 p-4 rounded-lg min-h-16"></p>
+                <h4 class="font-semibold text-lg mb-2 flex items-center gap-2"><i class="fa-solid fa-sticky-note"></i>Catatan</h4>
+                <p id="detailNotes" class="text-gray-700 bg-gray-50 p-3 rounded-lg min-h-16 break-words"></p>
               </div>
             </div>
           </div>
@@ -752,582 +229,376 @@
     </div>
   </div>
 
-  <!-- Custom Message Box HTML -->
-  <div id="messageBoxOverlay" class="message-box-overlay hidden">
-    <div id="messageBoxContent" class="message-box-content">
-      <p id="messageBoxText"></p>
-      <div id="messageBoxButtons">
-        <!-- Buttons will be rendered here -->
-      </div>
-    </div>
-  </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Pesan notifikasi</div>
 
   <script>
-    // Store all collections
-    let collections = [];
-    // Variable to store the ID of the item being edited
-    let editingItemId = null;
-    const MAX_FILE_SIZE_MB = 2; // Maximum file size in MB
+    // ===================================================================================
+    // FUNGSI BANTUAN (HARUS DIDEFINISIKAN SEBELUM DIGUNAKAN)
+    // ===================================================================================
 
-    // Custom message box functions
-    function showMessageBox(message, type = 'info', onConfirm = null) {
-      document.getElementById('messageBoxText').textContent = message;
-      const messageBoxButtons = document.getElementById('messageBoxButtons');
-      messageBoxButtons.innerHTML = ''; // Clear existing buttons
+    // Fungsi untuk menampilkan notifikasi (toast)
+    const showToast = (message) => {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    };
 
-      if (type === 'confirm') {
-        const confirmBtn = document.createElement('button');
-        confirmBtn.textContent = 'Ya';
-        confirmBtn.onclick = () => {
-          hideMessageBox();
-          if (onConfirm) onConfirm(true);
-        };
-        messageBoxButtons.appendChild(confirmBtn);
-
-        const cancelBtn = document.createElement('button');
-        cancelBtn.textContent = 'Tidak';
-        cancelBtn.className = 'cancel-btn';
-        cancelBtn.onclick = () => {
-          hideMessageBox();
-          if (onConfirm) onConfirm(false);
-        };
-        messageBoxButtons.appendChild(cancelBtn);
-      } else { // 'info' type
-        const okBtn = document.createElement('button');
-        okBtn.textContent = 'OK';
-        okBtn.onclick = () => {
-          hideMessageBox();
-          if (onConfirm) onConfirm(); // Call callback even for info, if provided
-        };
-        messageBoxButtons.appendChild(okBtn);
-      }
-
-      document.getElementById('messageBoxOverlay').classList.add('show');
-      document.getElementById('messageBoxOverlay').classList.remove('hidden');
-    }
-
-    function hideMessageBox() {
-      document.getElementById('messageBoxOverlay').classList.remove('show');
-      document.getElementById('messageBoxOverlay').classList.add('hidden');
-    }
-
-    // Function to save collections to localStorage
-    function saveCollections() {
-      localStorage.setItem('aiCollections', JSON.stringify(collections));
-    }
-
-    // Function to load collections from localStorage
-    function loadCollections() {
-      const storedCollections = localStorage.getItem('aiCollections');
-      if (storedCollections) {
-        collections = JSON.parse(storedCollections);
-      }
-    }
-
-    // Handle image preview and convert to Base64
-    document.getElementById('imageInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        // Validate file size
-        if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-          showMessageBox(`Ukuran file melebihi ${MAX_FILE_SIZE_MB}MB. Mohon unggah gambar yang lebih kecil.`);
-          this.value = ''; // Clear the input
-          document.getElementById('imagePreview').classList.add('hidden');
-          window.currentImageBase64 = '';
-          return;
+    // Fungsi Salin Teks Universal yang Lebih Andal
+    const copyTextToClipboard = (text) => {
+        if (!text || typeof text !== 'string') {
+            showToast('Tidak ada teks untuk disalin.');
+            return;
         }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64String = e.target.result;
-          document.getElementById('previewImg').src = base64String;
-          document.getElementById('imagePreview').classList.remove('hidden');
-          window.currentImageBase64 = base64String;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        document.getElementById('imagePreview').classList.add('hidden');
-        window.currentImageBase64 = '';
-      }
-    });
-
-    // Handle platform selection
-    document.querySelectorAll('input[name="platform"]').forEach(radio => {
-      radio.addEventListener('change', function() {
-        // Hide all platform-specific fields first
-        document.getElementById('tensorFields').classList.add('hidden');
-        document.getElementById('altModelFields').classList.add('hidden');
-        document.getElementById('midjourneyModels').classList.add('hidden');
-        document.getElementById('piclumenModels').classList.add('hidden');
-        document.getElementById('dreaminaModels').classList.add('hidden');
-        document.getElementById('leonardoModels').classList.add('hidden');
-        document.getElementById('geminiModels').classList.add('hidden');
         
-        // Show fields based on selected platform
-        if (this.value === 'tensor') {
-          document.getElementById('tensorFields').classList.remove('hidden');
+        // Metode modern: Navigator Clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Teks berhasil disalin!');
+            }).catch(err => {
+                console.error('Gagal menggunakan navigator.clipboard:', err);
+                fallbackCopy(text); // Coba metode fallback jika gagal
+            });
         } else {
-          document.getElementById('altModelFields').classList.remove('hidden');
-          if (this.value === 'midjourney') {
-            document.getElementById('midjourneyModels').classList.remove('hidden');
-          } else if (this.value === 'piclumen') {
-            document.getElementById('piclumenModels').classList.remove('hidden');
-          } else if (this.value === 'gemini') {
-            document.getElementById('geminiModels').classList.remove('hidden');
-          } else if (this.value === 'leonardo') {
-            document.getElementById('leonardoModels').classList.remove('hidden');
-          }
+            fallbackCopy(text); // Langsung gunakan metode fallback
         }
-      });
-    });
+    };
 
-    // Handle custom model input
-    document.getElementById('model').addEventListener('change', function() {
-      document.getElementById('customModel').classList.toggle('hidden', this.value !== 'custom');
-    });
-
-    // Function to reset the form to its initial state
-    function resetForm() {
-      document.getElementById('imageForm').reset();
-      document.getElementById('imagePreview').classList.add('hidden');
-      window.currentImageBase64 = '';
-      document.getElementById('customModel').classList.add('hidden');
-      // Set Gemini as default again after reset
-      document.getElementById('gemini').checked = true;
-      document.getElementById('gemini').dispatchEvent(new Event('change'));
-      // Set Gemini 2.5 Flash as default model
-      document.getElementById('geminiModel').value = 'Gemini 2.5 Flash';
-      editingItemId = null; // Clear editing state
-      document.getElementById('submitBtn').innerHTML = '<i class="fa-solid fa-save"></i> Simpan Koleksi';
-      document.getElementById('submitBtn').classList.remove('bg-blue-600', 'hover:bg-blue-700');
-      document.getElementById('submitBtn').classList.add('bg-indigo-600', 'hover:bg-indigo-700');
-    }
-
-    // Handle form submission (Add or Edit)
-    document.getElementById('imageForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const platform = document.querySelector('input[name="platform"]:checked').value;
-      const prompt = document.getElementById('prompt').value;
-      const negativePrompt = document.getElementById('negativePrompt').value;
-      const tags = document.getElementById('tags').value;
-      const notes = document.getElementById('notes').value;
-
-      let model = '';
-      if (platform === 'tensor') {
-        model = document.getElementById('model').value === 'custom' ? 
-                document.getElementById('customModel').value : 
-                document.getElementById('model').value;
-      } else if (platform === 'midjourney') {
-        model = document.getElementById('midjourneyModel').value;
-      } else if (platform === 'piclumen') {
-        model = document.getElementById('piclumenModel').value;
-      } else if (platform === 'gemini') {
-        model = document.getElementById('geminiModel').value;
-      } else if (platform === 'leonardo') {
-        model = document.getElementById('leonardoModel').value;
-      }
-
-      const tensorData = platform === 'tensor' ? {
-        vae: document.getElementById('vae').value,
-        sampler: document.getElementById('sampler').value,
-        scheduler: document.getElementById('scheduler').value,
-        cfg: document.getElementById('cfg').value,
-        steps: document.getElementById('steps').value,
-        seed: document.getElementById('seed').value || 'acak',
-        upscaler: document.getElementById('upscaler').checked,
-        adetailer: document.getElementById('adetailer').checked,
-        lora: Array.from(document.querySelectorAll('.lora-item')).map(item => {
-          const name = item.querySelector('.lora-name').value;
-          const strength = item.querySelector('.lora-strength').value;
-          return name ? `${name}: ${strength}` : null;
-        }).filter(item => item !== null)
-      } : {};
-
-      const collectionItem = {
-        id: editingItemId || Date.now(), // Use existing ID if editing, otherwise generate new
-        image: window.currentImageBase64 || '',
-        platform,
-        prompt,
-        negativePrompt,
-        model,
-        tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        notes,
-        ...tensorData
-      };
-
-      if (editingItemId) {
-        // Update existing item
-        const index = collections.findIndex(item => item.id === editingItemId);
-        if (index !== -1) {
-          collections[index] = collectionItem;
-          showMessageBox('Koleksi berhasil diperbarui!');
+    const fallbackCopy = (text) => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showToast('Teks berhasil disalin!');
+            } else {
+                showToast('Gagal menyalin teks.');
+            }
+        } catch (err) {
+            console.error('Gagal menggunakan execCommand:', err);
+            showToast('Gagal menyalin teks.');
         }
-      } else {
-        // Add new item
-        collections.push(collectionItem);
-        showMessageBox('Koleksi berhasil disimpan!');
+        document.body.removeChild(textArea);
+    };
+    
+    // Fungsi pembantu untuk menyalin teks dari sebuah elemen berdasarkan ID-nya
+    const copyElementText = (elementId) => {
+        const element = document.getElementById(elementId);
+        if (element && element.textContent) {
+            copyTextToClipboard(element.textContent);
+        } else {
+            showToast('Tidak ada teks untuk disalin.');
+        }
+    };
+
+    // ===================================================================================
+    // FUNGSI UTAMA APLIKASI
+    // ===================================================================================
+
+    let collections = [];
+    let currentDetailItem = null; // Store the full item for detail view
+    let currentView = 'grid-2x2'; // Default view
+
+    // Fungsi untuk menampilkan koleksi di galeri
+    const renderGallery = (filteredCollections = collections) => {
+      const gallery = document.getElementById('gallery');
+      const emptyGallery = document.getElementById('emptyGallery');
+
+      gallery.innerHTML = '';
+      if (filteredCollections.length === 0) {
+        emptyGallery.classList.remove('hidden');
+        gallery.classList.add('hidden');
+        return;
       }
       
-      saveCollections(); // Save to localStorage
-      resetForm(); // Reset form after saving/updating
-      renderGallery();
-    });
+      emptyGallery.classList.add('hidden');
+      gallery.classList.remove('hidden');
 
-    // Reset form button click
-    document.getElementById('resetBtn').addEventListener('click', function() {
-      showMessageBox('Yakin ingin mereset semua data pada formulir?', 'confirm', (confirmed) => {
-        if (confirmed) {
-          resetForm();
-        }
-      });
-    });
-
-    // Delete item
-    function deleteItem(id) {
-      showMessageBox('Yakin ingin menghapus koleksi ini secara permanen?', 'confirm', (confirmed) => {
-        if (confirmed) {
-          collections = collections.filter(item => item.id !== id);
-          saveCollections(); // Save to localStorage
-          renderGallery();
-          document.getElementById('detailModal').classList.add('hidden');
-        }
-      });
-    }
-
-    // Export JSON
-    document.getElementById('exportBtn').addEventListener('click', function() {
-      const dataStr = JSON.stringify(collections, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'koleksi-gambar-ai.json';
-      link.click();
-      showMessageBox('Data berhasil diekspor!');
-    });
-
-    // Import JSON
-    document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importInput').click());
-    document.getElementById('importInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            const imported = JSON.parse(e.target.result);
-            collections = [...imported]; // Overwrite or merge based on preference, here it overwrites
-            saveCollections(); // Save to localStorage
-            showMessageBox('Data berhasil diimpor!');
-            renderGallery();
-          } catch (error) {
-            showMessageBox('Gagal membaca file JSON. Pastikan formatnya benar.');
-            console.error(error);
-          }
-        };
-        reader.readAsText(file);
+      // Apply current view class
+      gallery.className = 'grid gap-5'; // Reset classes
+      if (currentView === 'grid-2x2') {
+        gallery.classList.add('gallery-grid-2x2', 'sm:grid-cols-2', 'md:grid-cols-2', 'lg:grid-cols-2');
+      } else if (currentView === 'grid-3x3') {
+        gallery.classList.add('gallery-grid-3x3', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-3');
+      } else if (currentView === 'list') {
+        gallery.classList.add('gallery-list');
       }
-    });
 
-    // Filter and Search Logic
-    function filterAndSearchCollections() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const selectedPlatform = document.getElementById('platformFilter').value;
+      filteredCollections.forEach((item, index) => {
+        // Ensure item.tags is a string before splitting
+        const tagsHtml = item.tags && typeof item.tags === 'string' ? item.tags.split(',').map(tag => tag.trim() ? `<span class="badge bg-indigo-100 text-indigo-800">${tag.trim()}</span>` : '').join('') : '';
+        
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col cursor-pointer';
+        // Pass the full item object to showDetail
+        galleryItem.onclick = () => showDetail(item); 
+        
+        let itemContent;
+        if (currentView === 'list') {
+          itemContent = `
+            <div class="flex items-center p-4">
+              <img src="${item.imageUrl || 'https://placehold.co/100x100/e2e8f0/e2e8f0?text=X'}" class="w-24 h-24 object-cover rounded-lg mr-4" onerror="this.onerror=null;this.src='https://placehold.co/100x100/e2e8f0/e2e8f0?text=X';">
+              <div class="flex-grow">
+                <h3 class="font-semibold mb-1">${item.model || 'N/A'}</h3>
+                <p class="text-sm text-gray-600 mb-2 line-clamp-2">${item.prompt || 'Tidak ada prompt'}</p>
+                <div class="flex flex-wrap gap-1">
+                  ${tagsHtml}
+                </div>
+              </div>
+              <div class="ml-4">
+                <span class="badge bg-indigo-100 text-indigo-800 capitalize">${item.platform || 'N/A'}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          itemContent = `
+            <div class="relative">
+              <img src="${item.imageUrl || 'https://placehold.co/500x500/e2e8f0/e2e8f0?text=X'}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/500x500/e2e8f0/e2e8f0?text=X';">
+              <div class="absolute top-2 right-2">
+                <span class="badge bg-indigo-100 text-indigo-800 capitalize">${item.platform || 'N/A'}</span>
+              </div>
+            </div>
+            <div class="p-4 flex flex-col flex-grow">
+              <h3 class="font-semibold mb-1 truncate">${item.model || 'N/A'}</h3>
+              <p class="text-sm text-gray-600 mb-3 flex-grow line-clamp-2">${item.prompt || 'Tidak ada prompt'}</p>
+              <div class="flex flex-wrap gap-1 mb-3">
+                ${tagsHtml}
+              </div>
+            </div>
+          `;
+        }
+        galleryItem.innerHTML = itemContent;
+        gallery.appendChild(galleryItem);
+      });
+    };
 
-        const filteredCollections = collections.filter(item => {
-            const matchesSearch = item.prompt.toLowerCase().includes(searchTerm) ||
-                                  item.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-                                  item.model.toLowerCase().includes(searchTerm) ||
-                                  (item.negativePrompt && item.negativePrompt.toLowerCase().includes(searchTerm)) ||
-                                  (item.notes && item.notes.toLowerCase().includes(searchTerm));
-            
-            const matchesPlatform = selectedPlatform === '' || item.platform === selectedPlatform;
-
-            return matchesSearch && matchesPlatform;
-        });
-        renderGallery(filteredCollections);
-    }
-
-    document.getElementById('searchInput').addEventListener('input', filterAndSearchCollections);
-    document.getElementById('platformFilter').addEventListener('change', filterAndSearchCollections);
-
-
-    // Render Gallery
-    function renderGallery(itemsToRender = collections) {
-      const gallery = document.getElementById('gallery');
-      gallery.innerHTML = '';
-      if (itemsToRender.length === 0) {
-        gallery.innerHTML = '<p class="text-gray-500 text-center col-span-full py-10">Belum ada koleksi tersimpan. Tambahkan yang pertama!</p>';
+    // Fungsi untuk menampilkan detail modal
+    const showDetail = (item) => {
+      const detailModal = document.getElementById('detailModal');
+      currentDetailItem = item; // Store the item for copy functions
+      if (!item) {
+        console.error("Item detail is null or undefined.");
         return;
       }
 
-      itemsToRender.forEach(item => {
-        const tagsHTML = item.tags?.map(tag => 
-          `<span class="badge bg-indigo-100 text-indigo-800">${tag}</span>`
-        ).join('') || '';
-
-        const div = document.createElement('div');
-        div.className = 'gallery-item bg-white rounded-xl overflow-hidden border border-gray-200';
-        div.innerHTML = `
-          <div class="relative">
-            <img src="${item.image}" class="w-full h-48 object-cover">
-            <div class="absolute top-2 right-2">
-              <span class="badge bg-${item.platform === 'tensor' ? 'indigo' : 
-                     item.platform === 'midjourney' ? 'purple' : 
-                     item.platform === 'gemini' ? 'blue' : 
-                     item.platform === 'piclumen' ? 'green' : 'amber'}-100 text-${item.platform === 'tensor' ? 'indigo' : 
-                     item.platform === 'midjourney' ? 'purple' : 
-                     item.platform === 'gemini' ? 'blue' : 
-                     item.platform === 'piclumen' ? 'green' : 'amber'}-800">
-                ${item.platform.charAt(0).toUpperCase() + item.platform.slice(1)}
-              </span>
-            </div>
-            <button onclick="deleteItem(${item.id})" class="delete-btn">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-1">${item.model}</h3>
-            <p class="text-sm text-gray-600 mb-3">${item.prompt.substring(0, 50)}...</p>
-            <div class="flex flex-wrap gap-1 mb-3">${tagsHTML}</div>
-            <button onclick="showDetail(${item.id})" class="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">
-              Lihat Detail
-            </button>
-          </div>
-        `;
-        gallery.appendChild(div);
-      });
-    }
-
-    // Show Detail Modal and set editingItemId
-    function showDetail(id) {
-      const item = collections.find(c => c.id === id);
-      if (!item) return;
-
-      editingItemId = id; // Set the ID of the item being viewed in detail for potential editing
-
-      document.getElementById('detailImage').src = item.image;
-      document.getElementById('detailPrompt').textContent = item.prompt;
-      document.getElementById('detailNegativePrompt').textContent = item.negativePrompt || '-';
-      document.getElementById('detailPlatform').textContent = item.platform;
-      document.getElementById('detailModel').textContent = item.model;
-
+      document.getElementById('detailImage').src = item.imageUrl || 'https://placehold.co/500x500/e2e8f0/e2e8f0?text=Gambar+Tidak+Tersedia';
+      document.getElementById('detailPrompt').textContent = item.prompt || 'Tidak ada prompt.';
+      document.getElementById('detailNotes').textContent = item.notes || 'Tidak ada catatan.';
+      
       const tagsContainer = document.getElementById('detailTags');
-      tagsContainer.innerHTML = '';
-      (item.tags || []).forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'badge bg-indigo-100 text-indigo-800';
-        span.textContent = tag;
-        tagsContainer.appendChild(span);
-      });
+      tagsContainer.innerHTML = item.tags && typeof item.tags === 'string' ? item.tags.split(',').map(tag => tag.trim() ? `<span class="badge bg-indigo-100 text-indigo-800">${tag.trim()}</span>` : '').join('') : 'Tidak ada tag.';
 
-      // Show/hide tensor specific details and their copy buttons
-      const tensorDetailElements = ['detailSteps', 'detailCfg', 'detailSampler', 'detailScheduler', 'detailSeed'];
-      const tensorDetailContainers = ['detailLora', 'detailUpscaler', 'detailAdetailer']; // These are containers for badges/checkboxes
+      // Populate parameters section dynamically
+      const paramsSection = document.getElementById('detailParametersSection');
+      const paramsContent = document.getElementById('detailParametersContent');
+      paramsContent.innerHTML = ''; // Clear previous content
 
-      // Hide all tensor related sections initially
-      tensorDetailElements.forEach(id => {
-          const element = document.getElementById(id);
-          if (element && element.parentElement.classList.contains('copy-section')) {
-              element.parentElement.style.display = 'none';
+      let hasParameters = false;
+
+      // Helper to add parameter row
+      const addParamRow = (label, value, copyValue = value) => {
+          if (value !== undefined && value !== null && value !== '') {
+              paramsContent.innerHTML += `
+                  <div class="flex justify-between items-center">
+                      <span><strong>${label}:</strong> <span class="font-normal">${value}</span></span>
+                      <i class="fa-solid fa-copy copy-icon" onclick="copyTextToClipboard('${copyValue}')"></i>
+                  </div>
+              `;
+              hasParameters = true;
           }
-      });
-      tensorDetailContainers.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.style.display = 'none';
-      });
+      };
 
+      // Add common parameters
+      addParamRow('Platform', item.platform ? item.platform.charAt(0).toUpperCase() + item.platform.slice(1) : null);
+      addParamRow('Model', item.model);
+      addParamRow('Negative Prompt', item.negativePrompt);
 
-      if (item.platform === 'tensor') {
-          document.getElementById('detailSteps').textContent = item.steps;
-          document.getElementById('detailCfg').textContent = item.cfg;
-          document.getElementById('detailSampler').textContent = item.sampler;
-          document.getElementById('detailScheduler').textContent = item.scheduler;
-          document.getElementById('detailSeed').textContent = item.seed || '-';
-          
-          const loraContainer = document.getElementById('detailLora');
-          loraContainer.innerHTML = '';
-          (item.lora || []).forEach(lora => {
-            const span = document.createElement('span');
-            span.className = 'badge bg-green-100 text-green-800';
-            span.textContent = lora;
-            loraContainer.appendChild(span);
-          });
-
-          // Ensure these are visible when platform is tensor
-          document.getElementById('detailUpscaler').classList.toggle('hidden', !item.upscaler);
-          document.getElementById('detailAdetailer').classList.toggle('hidden', !item.adetailer);
-
-          tensorDetailElements.forEach(id => {
-              const element = document.getElementById(id);
-              if (element && element.parentElement.classList.contains('copy-section')) {
-                  element.parentElement.style.display = 'flex';
-              }
-          });
-          document.getElementById('detailLora').style.display = 'flex'; // Display LoRA container
-          document.getElementById('detailUpscaler').style.display = item.upscaler ? 'inline-block' : 'none';
-          document.getElementById('detailAdetailer').style.display = item.adetailer ? 'inline-block' : 'none';
-
-
-      }
-
-      document.getElementById('detailNotes').textContent = item.notes || '-';
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    // Function to populate the form for editing an item
-    function editItemFromDetail() {
-        document.getElementById('detailModal').classList.add('hidden'); // Hide detail modal
-
-        if (!editingItemId) return; // Should not happen if called from detail modal
-
-        const item = collections.find(c => c.id === editingItemId);
-        if (!item) return;
-
-        // Set form fields based on item data
-        document.getElementById('imageInput').value = ''; // Clear file input
-        window.currentImageBase64 = item.image; // Keep the current image if not re-uploaded
-        document.getElementById('previewImg').src = item.image;
-        document.getElementById('imagePreview').classList.remove('hidden');
-
-        document.getElementById('prompt').value = item.prompt;
-        document.getElementById('negativePrompt').value = item.negativePrompt || '';
-        document.getElementById('tags').value = (item.tags || []).join(', ');
-        document.getElementById('notes').value = item.notes || '';
-
-        // Set platform radio button
-        document.querySelector(`input[name="platform"][value="${item.platform}"]`).checked = true;
-        document.querySelector(`input[name="platform"][value="${item.platform}"]`).dispatchEvent(new Event('change'));
-
-        // Set model specific to platform
-        if (item.platform === 'tensor') {
-            const modelSelect = document.getElementById('model');
-            if (Array.from(modelSelect.options).some(opt => opt.value === item.model)) {
-                modelSelect.value = item.model;
-                document.getElementById('customModel').classList.add('hidden');
-            } else {
-                modelSelect.value = 'custom';
-                document.getElementById('customModel').value = item.model;
-                document.getElementById('customModel').classList.remove('hidden');
-            }
-            document.getElementById('vae').value = item.vae || '';
-            document.getElementById('sampler').value = item.sampler || 'dpmpp_2m';
-            document.getElementById('scheduler').value = item.scheduler || 'normal';
-            document.getElementById('cfg').value = item.cfg;
-            document.getElementById('steps').value = item.steps;
-            document.getElementById('seed').value = item.seed === 'acak' ? '' : item.seed; // Clear if 'acak'
-
-            // Populate LoRA fields
-            const loraInputs = document.querySelectorAll('.lora-item');
-            loraInputs.forEach((loraItem, index) => {
-                const nameInput = loraItem.querySelector('.lora-name');
-                const strengthInput = loraItem.querySelector('.lora-strength');
-                if (item.lora && item.lora[index]) {
-                    const [loraName, loraStrength] = item.lora[index].split(':').map(s => s.trim());
-                    nameInput.value = loraName || '';
-                    strengthInput.value = parseFloat(loraStrength) || 0.0;
-                } else {
-                    nameInput.value = '';
-                    strengthInput.value = 0.0;
+      // Add Tensor-specific data if available (assuming 'tensorData' is a property for 'tensor' platform)
+      if (item.platform === 'tensor' && item.tensorData) {
+        const td = item.tensorData;
+        addParamRow('VAE', td.vae);
+        addParamRow('Sampler', td.sampler);
+        addParamRow('Scheduler', td.scheduler);
+        addParamRow('Steps', td.steps);
+        addParamRow('CFG Scale', td.cfg);
+        addParamRow('Seed', td.seed);
+        
+        if (td.lora && Array.isArray(td.lora) && td.lora.length > 0) {
+            let loraHtml = '<div><strong>LoRA:</strong><div class="space-y-1 mt-1">';
+            td.lora.forEach((l) => {
+                if (l.name && l.name.trim() !== '') {
+                    const loraText = `${l.name}: ${l.strength || 'N/A'}`;
+                    loraHtml += `
+                        <div class="flex justify-between items-center">
+                            <span>${loraText}</span>
+                            <i class="fa-solid fa-copy copy-icon" onclick="copyTextToClipboard('${loraText}')"></i>
+                        </div>
+                    `;
+                    hasParameters = true;
                 }
             });
-            document.getElementById('upscaler').checked = item.upscaler;
-            document.getElementById('adetailer').checked = item.adetailer;
-        } else if (item.platform === 'midjourney') {
-            document.getElementById('midjourneyModel').value = item.model;
-        } else if (item.platform === 'piclumen') {
-            document.getElementById('piclumenModel').value = item.model;
-        } else if (item.platform === 'gemini') {
-            document.getElementById('geminiModel').value = item.model;
-        } else if (item.platform === 'leonardo') {
-            document.getElementById('leonardoModel').value = item.model;
+            loraHtml += '</div></div>';
+            paramsContent.innerHTML += loraHtml;
         }
 
-        // Change submit button text and color to indicate editing mode
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Perbarui Koleksi';
-        submitBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
-        submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-
-        // Scroll to top of the form
-        document.getElementById('imageForm').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Copy single text
-    function copyText(elementId) {
-      const text = document.getElementById(elementId).textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        showMessageBox('Tersalin: ' + text);
-      });
-    }
-
-    // Copy to clipboard
-    function copyToClipboard(field) {
-      let text = '';
-      const item = collections.find(c => c.id === editingItemId); // Use editingItemId to get current item data
-
-      if (!item) return;
-
-      if (field === 'prompt') text = item.prompt;
-      else if (field === 'negativePrompt') text = item.negativePrompt || '';
-      else if (field === 'model') text = item.model;
-      else if (field === 'lora') text = (item.lora || []).join(', ');
-      else if (field === 'parameters') {
-        if (item.platform === 'tensor') {
-            text = [
-                `Steps: ${item.steps}`,
-                `CFG: ${item.cfg}`,
-                `Sampler: ${item.sampler}`,
-                `Scheduler: ${item.scheduler}`,
-                `Seed: ${item.seed}`,
-            ].join('\n');
-        } else {
-            text = "Parameter hanya tersedia untuk platform Tensor.";
+        let badgesHtml = '';
+        if (td.upscaler) badgesHtml += `<span class="badge bg-yellow-100 text-yellow-800">Upscaler</span>`;
+        if (td.adetailer) badgesHtml += `<span class="badge bg-yellow-100 text-yellow-800">ADetailer</span>`;
+        if (badgesHtml) {
+            paramsContent.innerHTML += `<div class="mt-2 flex gap-2">${badgesHtml}</div>`;
+            hasParameters = true;
         }
       }
-      navigator.clipboard.writeText(text).then(() => {
-        showMessageBox(`${field} berhasil disalin!`);
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-        showMessageBox('Gagal menyalin. Silakan coba lagi.');
-      });
-    }
 
-    // Copy all data
-    function copyAllData() {
-      const item = collections.find(c => c.id === editingItemId);
-      if (!item) return;
-      let text = `Prompt: ${item.prompt}\n`;
-      if (item.negativePrompt) text += `Negative Prompt: ${item.negativePrompt}\n`;
-      text += `Platform: ${item.platform}\n`;
-      text += `Model: ${item.model}\n`;
-      if (item.tags && item.tags.length) text += `Tags: ${item.tags.join(', ')}\n`;
-      if (item.platform === 'tensor') {
-        text += `Steps: ${item.steps}\n`;
-        text += `CFG: ${item.cfg}\n`;
-        text += `Sampler: ${item.sampler}\n`;
-        text += `Scheduler: ${item.scheduler}\n`;
-        text += `Seed: ${item.seed}\n`;
-        if (item.lora && item.lora.length) text += `LoRA: ${item.lora.join(', ')}\n`;
-        if (item.upscaler) text += `Upscaler: Ya\n`;
-        if (item.adetailer) text += `ADetailer: Ya\n`;
+      // Show/hide parameters section based on content
+      if (hasParameters) {
+        paramsSection.classList.remove('hidden');
+      } else {
+        paramsSection.classList.add('hidden');
       }
-      if (item.notes) text += `Catatan: ${item.notes}\n`;
-      navigator.clipboard.writeText(text).then(() => {
-        showMessageBox('Semua data berhasil disalin!');
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-        showMessageBox('Gagal menyalin. Silakan coba lagi.');
-      });
-    }
 
-    // Initialize: Load collections, set Gemini as default platform and Gemini 2.5 Flash as default model
+      detailModal.classList.remove('hidden');
+    };
+
+    const closeDetailModal = () => {
+      const detailModal = document.getElementById('detailModal');
+      detailModal.classList.add('hidden');
+      currentDetailItem = null;
+    };
+    
+    // Fungsi untuk menerapkan filter pencarian
+    const applyFilters = () => {
+        const searchInput = document.getElementById('searchInput');
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filtered = collections.filter(item => {
+            const matchesSearch = searchTerm === '' ||
+                (item.prompt && item.prompt.toLowerCase().includes(searchTerm)) ||
+                (item.tags && typeof item.tags === 'string' && item.tags.toLowerCase().includes(searchTerm)) ||
+                (item.model && item.model.toLowerCase().includes(searchTerm));
+            
+            return matchesSearch;
+        });
+        renderGallery(filtered);
+    };
+
+    // ===================================================================================
+    // INISIALISASI APLIKASI (JALANKAN SETELAH DOM SEPENUHNYA DIMUAT)
+    // ===================================================================================
+    
     document.addEventListener('DOMContentLoaded', () => {
-      loadCollections(); // Load data from localStorage
-      document.getElementById('gemini').checked = true;
-      document.getElementById('gemini').dispatchEvent(new Event('change'));
-      document.getElementById('geminiModel').value = 'Gemini 2.5 Flash';
-      filterAndSearchCollections(); // Render gallery with any initial filters/search terms
+      // Dapatkan referensi elemen DOM di sini
+      const importInput = document.getElementById('importInput');
+      const importBtn = document.getElementById('importBtn');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      const searchInput = document.getElementById('searchInput');
+      const viewGrid2x2Btn = document.getElementById('viewGrid2x2');
+      const viewGrid3x3Btn = document.getElementById('viewGrid3x3');
+      const viewListBtn = document.getElementById('viewList');
+      const copyImageUrlBtn = document.getElementById('copyImageUrlBtn');
+      const openImageNewTabBtn = document.getElementById('openImageNewTabBtn');
+
+      // Event Listeners
+      importBtn.addEventListener('click', () => {
+          console.log("Import button clicked.");
+          importInput.click();
+      });
+
+      importInput.addEventListener('change', function(e) {
+        console.log("File input change event triggered.");
+        const file = e.target.files[0];
+        if (file) {
+          console.log("File selected:", file.name);
+          fileNameDisplay.textContent = file.name;
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            console.log("FileReader onload event triggered.");
+            try {
+              const importedData = JSON.parse(e.target.result);
+              console.log("JSON parsed successfully. Data length:", importedData.length);
+
+              if (Array.isArray(importedData) && importedData.every(d => d.imageUrl && d.prompt)) {
+                collections = importedData; // Replace current collections
+                renderGallery();
+                showToast(`${collections.length} koleksi berhasil diimpor!`);
+              } else {
+                throw new Error("Format JSON tidak valid. Pastikan ini adalah array objek dengan 'imageUrl' dan 'prompt'.");
+              }
+            } catch (error) {
+              showToast(`Gagal impor: ${error.message}`);
+              console.error("Import error:", error);
+            }
+          }
+
+          reader.onerror = function(error) {
+              console.error("FileReader error:", error);
+              showToast("Gagal membaca file.");
+          };
+
+          reader.readAsText(file);
+          this.value = ''; // Reset input file
+        } else {
+          console.log("No file selected.");
+          fileNameDisplay.textContent = 'Belum ada file dipilih.';
+        }
+      });
+
+      // Handle View Options
+      const setView = (view) => {
+        currentView = view;
+        viewGrid2x2Btn.classList.remove('active');
+        viewGrid3x3Btn.classList.remove('active');
+        viewListBtn.classList.remove('active');
+
+        if (view === 'grid-2x2') {
+          viewGrid2x2Btn.classList.add('active');
+        } else if (view === 'grid-3x3') {
+          viewGrid3x3Btn.classList.add('active');
+        } else if (view === 'list') {
+          viewListBtn.classList.add('active');
+        }
+        applyFilters(); // Re-render with new view
+      };
+
+      viewGrid2x2Btn.addEventListener('click', () => setView('grid-2x2'));
+      viewGrid3x3Btn.addEventListener('click', () => setView('grid-3x3'));
+      viewListBtn.addEventListener('click', () => setView('list'));
+
+      // Handle Search Input
+      searchInput.addEventListener('input', applyFilters);
+
+      // Handle Salin URL Gambar
+      copyImageUrlBtn.addEventListener('click', function() {
+          if (currentDetailItem && currentDetailItem.imageUrl) {
+              copyTextToClipboard(currentDetailItem.imageUrl);
+              showToast('URL Gambar berhasil disalin!');
+          } else {
+              showToast('Tidak ada URL gambar untuk disalin.');
+          }
+      });
+
+      // Handle Buka Gambar di Tab Baru
+      openImageNewTabBtn.addEventListener('click', function(e) {
+          if (currentDetailItem && currentDetailItem.imageUrl) {
+              this.href = currentDetailItem.imageUrl;
+          } else {
+              e.preventDefault(); // Prevent opening empty tab
+              showToast('Tidak ada gambar untuk dibuka.');
+          }
+      });
+
+      // Initial render with empty collections
+      renderGallery();
     });
   </script>
 </body>
